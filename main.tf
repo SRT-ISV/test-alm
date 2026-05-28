@@ -1,3 +1,11 @@
+locals {
+
+ subs = jsondecode(var.subnet_json)
+ private_service_access = jsondecode(var.private_service_access_json)
+ routes = jsondecode(var.routes_json)
+}
+
+
 module "vpc" {
     source  = "terraform-google-modules/network/google"
     version = "~> 18.1"
@@ -6,7 +14,7 @@ module "vpc" {
     network_name         = "example-vpc"
     routing_mode         = "GLOBAL"
 
-     subnets = var.subnets
+     subnets =  local.subs   #var.subnets
      #[
     #     {
     #         subnet_name           = "subnet-01"
@@ -15,17 +23,29 @@ module "vpc" {
     #     }
     # ]
 
-     private_service_access_config = var.private_service_access
+     private_service_access_config = local.private_service_access  #var.private_service_access
      #{
     #                                 "address_name": "private-ip-address",
     #                                 "enable_private_services_connection": false,
     #                                 "prefix_length": 16
     #                                 }
 
-    routes = var.routes
+    routes = local.routes
     
-    
-    
-    
+     
    
 }
+
+
+
+# output "json_sub" {
+#   value = local.subs
+# }
+
+# output "json_routes" {
+#   value = local.routes
+# }
+
+# output "json_private_service_access" {
+#   value = local.private_service_access
+# }

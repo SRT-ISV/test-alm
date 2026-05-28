@@ -3,6 +3,7 @@ variable "project_id" {
   default = "saas-demo-496915"
 }
 
+/*
 variable "subnets" {
   type = list(object({
     subnet_name                      = string
@@ -32,44 +33,64 @@ variable "subnets" {
         }
     ]
 }
+*/
 
+variable "subnet_json" {
+  type        = string
+  description = "A JSON string representing a complex map or object"
+  default     = "[{\"subnet_name\":\"subnet-01\",\"subnet_ip\":\"10.10.10.0\\/24\",\"subnet_region\":\"us-central1\"}]"
+}
 
-variable "private_service_access" {
-  type = object({
-    enable_private_services_connection = bool
-    address_name                       = string
-    prefix_length                      = number
-  })
-  default = {
-            "address_name": "private-ip-address",
-            "enable_private_services_connection": false,
-            "prefix_length": 16
-             }
+# variable "private_service_access" {
+#   type = object({
+#     enable_private_services_connection = bool
+#     address_name                       = string
+#     prefix_length                      = number
+#   })
+#   default = {
+#             "address_name": "private-ip-address",
+#             "enable_private_services_connection": false,
+#             "prefix_length": 16
+#              }
+# }
+
+variable "private_service_access_json" {
+  type        = string
+  description = "A JSON string representing the private service access configuration"
+  default     = "{\"address_name\":\"private-ip-address\",\"enable_private_services_connection\":false,\"prefix_length\":16}"
 }
 
 
-variable "routes" {
-  type = list(object({
-    name                   = string
-    description            = optional(string)
-    tags                   = optional(list(string), [])
-    destination_range      = string
-    next_hop_gateway       = optional(string)
-    next_hop_internet      = optional(bool, false)
-    next_hop_ip            = optional(string)
-    next_hop_instance      = optional(string)
-    next_hop_instance_zone = optional(string)
-    next_hop_vpn_tunnel    = optional(string)
-    next_hop_ilb           = optional(string)
-    priority               = optional(number, 1000)
-  }))
-  default =  [
-        {
-            name                   = "egress-internet"
-            description            = "route through IGW to access internet"
-            destination_range      = "0.0.0.0/0"
-            tags                   = ["egress-inet"]
-            next_hop_internet      = true
-        },
-    ]
+# variable "routes" {
+#   type = list(object({
+#     name                   = string
+#     description            = optional(string)
+#     tags                   = optional(list(string), [])
+#     destination_range      = string
+#     next_hop_gateway       = optional(string)
+#     next_hop_internet      = optional(bool, false)
+#     next_hop_ip            = optional(string)
+#     next_hop_instance      = optional(string)
+#     next_hop_instance_zone = optional(string)
+#     next_hop_vpn_tunnel    = optional(string)
+#     next_hop_ilb           = optional(string)
+#     priority               = optional(number, 1000)
+#   }))
+#   default =  [
+#         {
+#             name                   = "egress-internet"
+#             description            = "route through IGW to access internet"
+#             destination_range      = "0.0.0.0/0"
+#             tags                   = ["egress-inet"]
+#             next_hop_internet      = true
+#         },
+#     ]
+# }
+
+
+
+variable "routes_json" {
+  type        = string
+  description = "A JSON string representing a list of route configurations"
+  default     = "[{\"name\":\"egress-internet\",\"description\":\"route through IGW to access internet\",\"destination_range\":\"0.0.0.0\\/0\",\"tags\":[\"egress-inet\"],\"next_hop_internet\":true}]"
 }
